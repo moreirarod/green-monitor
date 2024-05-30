@@ -9,7 +9,7 @@ CREATE TABLE T_GM_USUARIO (
   nm_usuario          VARCHAR2(100) NOT NULL,
   nm_email            VARCHAR2(100) NOT NULL,
   nm_senha            VARCHAR2(100) NOT NULL,
-  st_tipo_usuario     VARCHAR2(100) DEFAULT 'USER'
+  st_tipo_usuario     VARCHAR2(100) DEFAULT 'USER' NOT NULL,
+  CONSTRAINT CK_TIPO_USUARIO CHECK (st_tipo_usuario IN ('USER', 'ADMIN')),
+  CONSTRAINT UQ_NM_EMAIL UNIQUE (nm_email)
 );  
-
-ALTER TABLE T_GM_USUARIO ADD CONSTRAINT UNQ_NM_EMAIL UNIQUE (nm_email);

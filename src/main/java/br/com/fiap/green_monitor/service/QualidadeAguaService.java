@@ -52,14 +52,4 @@ public class QualidadeAguaService {
     repository.deleteAll();
   }
 
-  public QualidadeAgua update(QualidadeAgua QualidadeAgua) {
-    Optional<QualidadeAgua> QualidadeAguaOptional = repository
-        .findById(QualidadeAgua.getId());
-    if (QualidadeAguaOptional.isPresent()) {
-      return repository.save(QualidadeAgua);
-    } else {
-      throw new ItemNaoEncontradoException("Item não encontrado no banco de dados");
-    }
-  }
-
 }

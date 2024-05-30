@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -25,6 +26,7 @@ public class AlertaDesastreNatural {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ALERTA_DESASTRE_NATURAL")
+  @SequenceGenerator(name = "SEQ_ALERTA_DESASTRE_NATURAL", sequenceName = "SEQ_ALERTA_DESASTRE_NATURAL", allocationSize = 1)
   @Column(name = "id_alerta")
   private int id;
 

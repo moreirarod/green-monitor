@@ -52,14 +52,4 @@ public class QualidadeArService {
     repository.deleteAll();
   }
 
-  public QualidadeAr update(QualidadeAr QualidadeAr) {
-    Optional<QualidadeAr> QualidadeArOptional = repository
-        .findById(QualidadeAr.getId());
-    if (QualidadeArOptional.isPresent()) {
-      return repository.save(QualidadeAr);
-    } else {
-      throw new ItemNaoEncontradoException("Item não encontrado no banco de dados");
-    }
-  }
-
 }

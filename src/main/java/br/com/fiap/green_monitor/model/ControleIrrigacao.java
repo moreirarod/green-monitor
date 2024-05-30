@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -25,6 +26,7 @@ public class ControleIrrigacao {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CONTROLE_IRRIGACAO")
+  @SequenceGenerator(name = "SEQ_CONTROLE_IRRIGACAO", sequenceName = "SEQ_CONTROLE_IRRIGACAO", allocationSize = 1)
   @Column(name = "id_controle_irrigacao")
   private int id;
 

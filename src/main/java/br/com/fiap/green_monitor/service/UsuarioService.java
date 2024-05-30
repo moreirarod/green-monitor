@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.green_monitor.dto.UsuarioDTO;
@@ -37,8 +38,11 @@ public class UsuarioService {
   }
 
   public UsuarioNovoDTO save(UsuarioNovoDTO usuarioNovoDTO) {
+    String senhaCriptografada = new BCryptPasswordEncoder().encode(usuarioNovoDTO.senha());
+
     Usuario usuario = new Usuario();
     BeanUtils.copyProperties(usuarioNovoDTO, usuario);
+    usuario.setSenha(senhaCriptografada);
 
     Usuario usuarioSalvo = repository.save(usuario);
     return new UsuarioNovoDTO(usuarioSalvo);
@@ -55,16 +59,6 @@ public class UsuarioService {
 
   public void deleteAll() {
     repository.deleteAll();
-  }
-
-  public Usuario update(Usuario usuario) {
-    Optional<Usuario> usuarioOptional = repository
-        .findById(usuario.getId());
-    if (usuarioOptional.isPresent()) {
-      return repository.save(usuario);
-    } else {
-      throw new ItemNaoEncontradoException("Alerta não encontrado no banco de dados");
-    }
   }
 
 }

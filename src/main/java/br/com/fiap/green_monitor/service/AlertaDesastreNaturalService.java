@@ -56,14 +56,4 @@ public class AlertaDesastreNaturalService {
     repository.deleteAll();
   }
 
-  public AlertaDesastreNatural update(AlertaDesastreNatural alertaDesastreNatural) {
-    Optional<AlertaDesastreNatural> alertaDesastreNaturalOptional = repository
-        .findById(alertaDesastreNatural.getId());
-    if (alertaDesastreNaturalOptional.isPresent()) {
-      return repository.save(alertaDesastreNatural);
-    } else {
-      throw new ItemNaoEncontradoException("Alerta não encontrado no banco de dados");
-    }
-  }
-
 }

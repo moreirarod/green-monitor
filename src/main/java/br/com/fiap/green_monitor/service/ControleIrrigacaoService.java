@@ -56,14 +56,4 @@ public class ControleIrrigacaoService {
     repository.deleteAll();
   }
 
-  public ControleIrrigacao update(ControleIrrigacao ControleIrrigacao) {
-    Optional<ControleIrrigacao> ControleIrrigacaoOptional = repository
-        .findById(ControleIrrigacao.getId());
-    if (ControleIrrigacaoOptional.isPresent()) {
-      return repository.save(ControleIrrigacao);
-    } else {
-      throw new ItemNaoEncontradoException("Item não encontrado no banco de dados");
-    }
-  }
-
 }

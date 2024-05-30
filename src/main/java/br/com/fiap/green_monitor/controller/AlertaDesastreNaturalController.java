@@ -2,6 +2,8 @@ package br.com.fiap.green_monitor.controller;
 
 import java.util.List;
 
+import javax.swing.text.html.parser.Entity;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +18,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.green_monitor.dto.AlertaDesastreNaturalDTO;
+import br.com.fiap.green_monitor.exceptions.ItemNaoEncontradoException;
 import br.com.fiap.green_monitor.model.AlertaDesastreNatural;
 import br.com.fiap.green_monitor.service.AlertaDesastreNaturalService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/alerta")
@@ -36,12 +40,16 @@ public class AlertaDesastreNaturalController {
   @GetMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<AlertaDesastreNaturalDTO> findById(@PathVariable Integer id) {
-    return ResponseEntity.ok(service.findById(id));
+    try {
+      return ResponseEntity.ok(service.findById(id));
+    } catch (ItemNaoEncontradoException e) {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public AlertaDesastreNaturalDTO save(@RequestBody AlertaDesastreNaturalDTO alertaDesastreNatural) {
+  public AlertaDesastreNaturalDTO save(@RequestBody @Valid AlertaDesastreNaturalDTO alertaDesastreNatural) {
     return service.save(alertaDesastreNatural);
   }
 
@@ -55,12 +63,6 @@ public class AlertaDesastreNaturalController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteAll() {
     service.deleteAll();
-  }
-
-  @PutMapping
-  @ResponseStatus(HttpStatus.OK)
-  public AlertaDesastreNatural update(@RequestBody AlertaDesastreNatural alertaDesastreNatural) {
-    return service.update(alertaDesastreNatural);
   }
 
 }

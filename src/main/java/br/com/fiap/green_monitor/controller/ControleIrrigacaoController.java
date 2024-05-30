@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.green_monitor.dto.ControleIrrigacaoDTO;
-import br.com.fiap.green_monitor.model.ControleIrrigacao;
+import br.com.fiap.green_monitor.exceptions.ItemNaoEncontradoException;
 import br.com.fiap.green_monitor.service.ControleIrrigacaoService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/controle-irrigacao")
@@ -36,12 +36,16 @@ public class ControleIrrigacaoController {
   @GetMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<ControleIrrigacaoDTO> findById(@PathVariable Integer id) {
-    return ResponseEntity.ok(service.findById(id));
+    try {
+      return ResponseEntity.ok(service.findById(id));
+    } catch (ItemNaoEncontradoException e) {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public ControleIrrigacaoDTO save(@RequestBody ControleIrrigacaoDTO controleIrrigacao) {
+  public ControleIrrigacaoDTO save(@RequestBody @Valid ControleIrrigacaoDTO controleIrrigacao) {
     return service.save(controleIrrigacao);
   }
 
@@ -55,12 +59,6 @@ public class ControleIrrigacaoController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteAll() {
     service.deleteAll();
-  }
-
-  @PutMapping
-  @ResponseStatus(HttpStatus.OK)
-  public ControleIrrigacao update(@RequestBody ControleIrrigacao controleIrrigacao) {
-    return service.update(controleIrrigacao);
   }
 
 }

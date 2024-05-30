@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.green_monitor.dto.QualidadeArDTO;
+import br.com.fiap.green_monitor.exceptions.ItemNaoEncontradoException;
 import br.com.fiap.green_monitor.model.QualidadeAr;
 import br.com.fiap.green_monitor.service.QualidadeArService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/qualidade-ar")
@@ -36,12 +38,16 @@ public class QualidadeArController {
   @GetMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<QualidadeArDTO> findById(@PathVariable Integer id) {
-    return ResponseEntity.ok(service.findById(id));
+    try {
+      return ResponseEntity.ok(service.findById(id));
+    } catch (ItemNaoEncontradoException e) {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public QualidadeArDTO save(@RequestBody QualidadeArDTO qualidadeAr) {
+  public QualidadeArDTO save(@RequestBody @Valid QualidadeArDTO qualidadeAr) {
     return service.save(qualidadeAr);
   }
 
@@ -55,12 +61,6 @@ public class QualidadeArController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteAll() {
     service.deleteAll();
-  }
-
-  @PutMapping
-  @ResponseStatus(HttpStatus.OK)
-  public QualidadeAr update(@RequestBody QualidadeAr qualidadeAr) {
-    return service.update(qualidadeAr);
   }
 
 }

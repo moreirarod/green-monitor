@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.green_monitor.dto.UsuarioDTO;
 import br.com.fiap.green_monitor.dto.UsuarioNovoDTO;
+import br.com.fiap.green_monitor.exceptions.ItemNaoEncontradoException;
 import br.com.fiap.green_monitor.model.Usuario;
 import br.com.fiap.green_monitor.service.UsuarioService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/usuario")
@@ -37,12 +39,16 @@ public class UsuarioController {
   @GetMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<UsuarioDTO> findById(@PathVariable Integer id) {
-    return ResponseEntity.ok(service.findById(id));
+    try {
+      return ResponseEntity.ok(service.findById(id));
+    } catch (ItemNaoEncontradoException e) {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public UsuarioNovoDTO save(@RequestBody UsuarioNovoDTO usuario) {
+  public UsuarioNovoDTO save(@RequestBody @Valid UsuarioNovoDTO usuario) {
     return service.save(usuario);
   }
 
@@ -56,12 +62,6 @@ public class UsuarioController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteAll() {
     service.deleteAll();
-  }
-
-  @PutMapping
-  @ResponseStatus(HttpStatus.OK)
-  public Usuario update(@RequestBody Usuario usuario) {
-    return service.update(usuario);
   }
 
 }
