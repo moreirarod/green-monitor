@@ -40,6 +40,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Docker Compose
+        run: |
+          curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r .tag_name)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/loca/bin/docker-compose
+          chmod +x /usr/local/bin/docker-compose
+          ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
       - name: Deploy to Staging
         if: github.ref == 'refs/heads/staging'
         run: |
