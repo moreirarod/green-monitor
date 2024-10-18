@@ -43,11 +43,18 @@ jobs:
       # - name: Log in to Docker Hub
       #   run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'green-monitor'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_033ffad686e04fbb93d554dc485b7c4e }}
-          images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_312e6610f7ef43c5b3c1f31da58bb0d3 }}/rfariam/green-monitor:${{ github.sha }}'
+      - name: Deploy to Staging
+        if: github.ref == 'refs/heads/staging'
+        env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          VERSION_TAG: ${{ github.sha }}
+        run: |
+          docker compose -f docker-compose.yaml up -d --build
+
+      - name: Deploy to Production
+        if: github.ref == 'refs/heads/main'
+        env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          VERSION_TAG: ${{ github.sha }}
+        run: |
+          docker compose -f docker-compose.yaml up -d --build
