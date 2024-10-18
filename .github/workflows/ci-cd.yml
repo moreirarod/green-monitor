@@ -40,6 +40,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
       - name: Deploy to Staging
         if: github.ref == 'refs/heads/staging'
         env:
