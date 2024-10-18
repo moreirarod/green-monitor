@@ -42,10 +42,16 @@ jobs:
 
       - name: Deploy to Staging
         if: github.ref == 'refs/heads/staging'
+        env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          VERSION_TAG: ${{ github.sha }}
         run: |
           docker compose -f docker-compose.yaml up -d --build
 
       - name: Deploy to Production
         if: github.ref == 'refs/heads/main'
+        env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          VERSION_TAG: ${{ github.sha }}
         run: |
           docker compose -f docker-compose.yaml up -d --build
