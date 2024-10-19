@@ -25,8 +25,6 @@ Certifique-se de ter os seguintes itens instalados antes de iniciar o projeto:
 
 Compile o projeto utilizando o Maven:
 
-    bash
-
     mvn clean package
 
 ### Executar com Docker
@@ -35,13 +33,9 @@ Para rodar o projeto utilizando Docker, siga os passos abaixo:
 
 1. **Build da Imagem Docker:**
 
-        bash
-
-        docker build -t usuario/green-monitor:latest .
+        docker build -t rfariam/green-monitor:latest .
 
 2. **Executar o Projeto com Docker Compose: Certifique-se de que o docker-compose.yml está configurado corretamente:**
-
-        bash
 
         docker-compose up -d
 
@@ -58,8 +52,6 @@ As seguintes variáveis de ambiente são necessárias para o funcionamento do pr
 ### Testes
 
 Para executar os testes do projeto, utilize:
-
-    bash
 
     mvn test
 
