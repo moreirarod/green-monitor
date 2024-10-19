@@ -15,8 +15,6 @@ Certifique-se de ter os seguintes itens instalados antes de iniciar o projeto:
 
 ## Como inicializar e executar o projeto
 ### Clonar o Repositório
-
-    bash
     
     git clone https://github.com/usuario/green-monitor.git
     cd green-monitor
