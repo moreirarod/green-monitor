@@ -28,28 +28,17 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots verify
-
-      - run: mkdir staging && cp target/*.jar staging
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: Package
-          path: staging
+        run: mvn clean package
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+        run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: |
-            ${{ secrets.DOCKER_HUB_USERNAME }}/green-monitor:latest
-            ${{ secrets.DOCKER_HUB_USERNAME }}/green-monitor:${{ github.sha }}
+        run: |
+          docker build --build-arg JAR_FILE=target/green-monitor-0.0.1-SNAPSHOT.jar -t ${{ secrets.DOCKER_HUB_USERNAME }}/green-monitor:latest .
+          docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/green-monitor:latest ${{ secrets.DOCKER_HUB_USERNAME }}/green-monitor:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/green-monitor:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/green-monitor:${{ github.sha }}
 
   deploy:
     runs-on: ubuntu-latest
